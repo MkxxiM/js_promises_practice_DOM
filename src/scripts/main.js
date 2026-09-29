@@ -10,7 +10,6 @@ const firstPromise = new Promise((resolve, reject) => {
   });
 
   setTimeout(() => {
-    document.removeEventListener('click', function () {});
     reject(msg);
   }, 3000);
 });
@@ -18,12 +17,12 @@ const firstPromise = new Promise((resolve, reject) => {
 firstPromise.then(
   function (msg) {
     msg.classList.add('success');
-    msg.textContent = 'First promise was resolved!';
+    msg.textContent = 'First promise was resolved';
     document.body.appendChild(msg);
   },
   function (msg) {
     msg.classList.add('error');
-    msg.textContent = 'First promise was rejected!';
+    msg.textContent = 'First promise was rejected';
     document.body.appendChild(msg);
   },
 );
@@ -35,12 +34,7 @@ const secondPromise = new Promise((resolve) => {
 
   document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
-  });
-
-  document.addEventListener('auxclick', (e) => {
-    if (e.button === 2) {
-      resolve(msg);
-    }
+    resolve(msg);
   });
 
   document.addEventListener('click', () => {
@@ -51,7 +45,7 @@ const secondPromise = new Promise((resolve) => {
 secondPromise.then((msg) => {
   msg.dataset.qa = 'notification';
   msg.classList.add('success');
-  msg.textContent = 'Second promise was resolved!';
+  msg.textContent = 'Second promise was resolved';
   document.body.appendChild(msg);
 });
 
