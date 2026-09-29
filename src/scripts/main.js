@@ -1,6 +1,6 @@
 'use strict';
 
-const promise1 = new Promise((resolve, reject) => {
+const firstPromise = new Promise((resolve, reject) => {
   const msg = document.createElement('div');
 
   msg.dataset.qa = 'notification';
@@ -15,60 +15,62 @@ const promise1 = new Promise((resolve, reject) => {
   }, 3000);
 });
 
-promise1.then(
+firstPromise.then(
   function (msg) {
     msg.classList.add('success');
-    msg.textContent = 'Promise was resolved!';
+    msg.textContent = 'First promise was resolved!';
     document.body.appendChild(msg);
   },
   function (msg) {
     msg.classList.add('error');
-    msg.textContent = 'Promise was rejected!';
+    msg.textContent = 'First promise was rejected!';
     document.body.appendChild(msg);
   },
 );
 
-const secondPromise = () =>
-  new Promise((resolve) => {
-    const msg = document.createElement('div');
+const secondPromise = new Promise((resolve) => {
+  const msg = document.createElement('div');
 
-    msg.dataset.qa = 'notification';
+  msg.dataset.qa = 'notification';
 
-    document.addEventListener('contextmenu', (e) => {
-      e.preventDefault();
-    });
-
-    document.addEventListener('auxclick', (e) => {
-      if (e.button === 2) {
-        resolve(msg);
-      }
-    });
-
-    document.addEventListener('click', () => {
-      resolve(msg);
-    });
+  document.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
   });
 
-const promise2 = promise1.then(secondPromise);
+  document.addEventListener('auxclick', (e) => {
+    if (e.button === 2) {
+      resolve(msg);
+    }
+  });
 
-promise2.then((msg) => {
+  document.addEventListener('click', () => {
+    resolve(msg);
+  });
+});
+
+secondPromise.then((msg) => {
   msg.dataset.qa = 'notification';
   msg.classList.add('success');
   msg.textContent = 'Second promise was resolved!';
   document.body.appendChild(msg);
 });
 
-const promise3 = promise2.then(() => {
-  return new Promise((resolve) => {
-    const msg = document.createElement('div');
+const thirdPromise = new Promise((resolve) => {
+  const pressedKeys = new Set();
+  const msg = document.createElement('div');
 
-    msg.dataset.qa = 'notification';
+  msg.dataset.qa = 'notification';
 
-    resolve(msg);
+  document.addEventListener('mousedown', (e) => {
+    pressedKeys.add(e.button);
+
+    if (pressedKeys.has(0) && pressedKeys.has(2)) {
+      resolve(msg);
+    }
   });
 });
 
-promise3.then((msg) => {
+thirdPromise.then((msg) => {
   msg.dataset.qa = 'notification';
   msg.classList.add('success');
   msg.textContent = 'Third promise was resolved';
